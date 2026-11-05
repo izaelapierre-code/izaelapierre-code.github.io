@@ -1,0 +1,240 @@
+/* ==========================================================================
+   Izabella Lapierre — personal site
+   The idea: a neatly labeled office file. The menu is a row of folder tabs,
+   and each page reads like a tidy record. Clean, organized, nothing extra.
+   ========================================================================== */
+
+/* ---------- Design tokens (change colors and sizes here, in one place) ---------- */
+:root {
+  --ground:  #ffffff;   /* page background */
+  --ink:     #1a1416;   /* main text, near-black */
+  --maroon:  #840028;   /* UMass maroon (official brand value), the one accent */
+  --tint:    #f6ecef;   /* light maroon, for panels and inactive tabs */
+  --muted:   #5c5458;   /* small labels; still passes 4.5:1 contrast on white */
+
+  --font-head: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+
+  /* Five type sizes, clearly far apart */
+  --t-small: 0.875rem;  /* 14px labels */
+  --t-body:  1.0625rem; /* 17px reading text */
+  --t-lead:  1.375rem;  /* 22px lead sentence */
+  --t-h2:    2rem;      /* 32px page titles */
+  --t-h1:    clamp(2.5rem, 7vw, 3.75rem); /* 40–60px name on Home */
+
+  --page: 64rem;        /* widest the content gets */
+  --gap: 1.5rem;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--maroon) var(--tint); }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  caret-color: var(--maroon);
+}
+
+::selection { background: var(--maroon); color: #fff; }
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0 0 1rem; }
+
+a {
+  color: var(--maroon);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+a:hover { text-decoration-thickness: 2px; }
+
+/* Keyboard users always see where they are */
+:focus-visible { outline: 3px solid var(--maroon); outline-offset: 3px; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+.wrap { max-width: var(--page); margin: 0 auto; padding: 0 1.25rem; }
+
+/* ---------- Header: name + folder-tab menu ---------- */
+.site-header { padding-top: 1.75rem; }
+
+.wordmark {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--t-lead);
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 1.25rem;
+}
+.wordmark span { color: var(--maroon); }
+
+/* The tabs sit on a maroon rule, like file folders standing in a drawer */
+.tabs {
+  border-bottom: 3px solid var(--maroon);
+  overflow-x: auto;              /* on very narrow phones the tabs scroll, the page does not */
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tabs ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.tabs a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;              /* comfortable touch target */
+  padding: 0 0.85rem;
+  background: var(--tint);
+  color: var(--ink);
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: var(--t-small);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.tabs a:hover { background: #ecd7dd; }
+
+/* Phones: the five tabs share the width evenly so all of them, including Contact, are visible */
+@media (max-width: 479px) {
+  .tabs ul { gap: 2px; }
+  .tabs li { flex: 1 1 auto; }
+  .tabs a { justify-content: center; padding: 0 0.4rem; font-size: 0.8125rem; }
+}
+
+/* The tab for the page you are on is "pulled forward": filled maroon, joined to the rule */
+.tabs a[aria-current="page"] {
+  background: var(--maroon);
+  color: #fff;
+}
+
+/* ---------- Page body ---------- */
+main { padding: 3rem 0 4rem; }
+
+.page-title {
+  font-size: var(--t-h2);
+  margin-bottom: 1.5rem;
+}
+
+.lead {
+  font-size: var(--t-lead);
+  line-height: 1.45;
+  max-width: 34ch;
+}
+
+/* ---------- Home ---------- */
+.home {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+.home h1 { font-size: var(--t-h1); margin-bottom: 1.25rem; }
+.home .photo { max-width: 22rem; }
+.home .photo img { aspect-ratio: 4 / 5; object-fit: cover; object-position: center 25%; width: 100%; }
+
+.next-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .home { grid-template-columns: 1.4fr 1fr; gap: 3.5rem; }
+  .home .photo { justify-self: end; }
+}
+
+/* ---------- Record sheet (About, Contact): label on the left, value on the right ---------- */
+.record {
+  margin: 0 0 2.5rem;
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+}
+.record > div { display: grid; gap: 0.15rem; }
+.record dt {
+  color: var(--muted);
+  font-size: var(--t-small);
+  font-weight: 600;
+}
+.record dd { margin: 0; }
+
+@media (min-width: 600px) {
+  .record > div { grid-template-columns: 11rem 1fr; gap: 1rem; }
+}
+
+/* ---------- Panels (the tinted "sheet" used for quotes and the project) ---------- */
+.sheet {
+  background: var(--tint);
+  padding: 1.75rem;
+  max-width: 44rem;
+}
+.sheet + .sheet { margin-top: 1.5rem; }
+
+.quote { font-size: var(--t-lead); line-height: 1.45; margin: 0; }
+.quote-by { color: var(--muted); font-size: var(--t-small); margin: 0.75rem 0 0; }
+
+h2.section { font-size: var(--t-lead); margin: 2.5rem 0 1rem; }
+
+/* ---------- Projects ---------- */
+.project h2 { font-size: var(--t-lead); line-height: 1.25; margin-bottom: 0.5rem; }
+.project .meta { color: var(--muted); font-size: var(--t-small); margin-bottom: 1.25rem; }
+
+.files { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+.files li { min-height: 44px; display: flex; align-items: center; }
+
+/* ---------- Placeholders: easy to spot, clearly not finished ---------- */
+.ph {
+  color: var(--muted);
+  font-style: italic;
+}
+.ph-tag {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--maroon);
+  font-size: var(--t-small);
+}
+/* Placeholder links look like links but cannot be clicked yet */
+.ph-link { color: var(--muted); cursor: not-allowed; }
+
+/* ---------- Contact list ---------- */
+.contact-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.25rem; max-width: 44rem; }
+.contact-list li { display: grid; gap: 0.15rem; }
+.contact-list .label { color: var(--muted); font-size: var(--t-small); font-weight: 600; }
+.contact-list a { font-size: var(--t-lead); overflow-wrap: anywhere; }
+
+@media (min-width: 600px) {
+  .contact-list li { grid-template-columns: 11rem 1fr; gap: 1rem; align-items: baseline; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 3px solid var(--maroon);
+  padding: 1.5rem 0 2.5rem;
+  color: var(--muted);
+  font-size: var(--t-small);
+}
+.site-footer p { margin: 0; }
+
+/* No animations anywhere except the tab color change; turn even that off if asked */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
